@@ -4,13 +4,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from constants import default_cutoff
-from file_processors import process_file, process_big_file
+from file_processors import process_file, process_big_file, process_gro_xtc
 from number_of_contacts import calculate_q
 
 
 def parse_args(*argument_array):
     parser = argparse.ArgumentParser()
     parser.add_argument('input')
+    parser.add_argument('--input-xtc')
     parser.add_argument('definition', default=1, type=int)
     parser.add_argument('--ignore-h', action='store_true')
     parser.add_argument('--cutoff', type=float, default=default_cutoff)
@@ -22,7 +23,8 @@ def main(args):
     definition = args.definition
     cutoff = args.cutoff
     qs = []
-    for cnt_bucket, dna_bucket in process_big_file(input_file_name, args.ignore_h):
+    iterator = process_big_file(input_file_name, args.ignore_h) if not args.input_xtc else process_gro_xtc(input_file_name, args.input_xtc, args.ignore_h)
+    for cnt_bucket, dna_bucket in iterator:
         qs.append(calculate_q(cnt_bucket, dna_bucket, cutoff, definition))
     json.dump(qs, open('result', 'w'))
     # cnt_bucket, dna_bucket = process_file(input_file_name, args.ignore_h)
