@@ -1,0 +1,23 @@
+; GROMACS topology
+;
+; Include the force field
+#include "./amber99.ff/forcefield.itp"
+
+; Include chain topologies
+#include "bna.itp"
+#include "cnt.itp"
+
+; Include water topology
+#include "./amber99.ff/spce.itp"
+
+; Include topology for ions
+#include "./amber99.ff/ions.itp"
+
+[ system ]
+CNT and ssDNA complex in water
+
+[ molecules ]
+DNA_chain_A         1
+CNT                 1
+SOL         17147
+NA               13
